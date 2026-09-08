@@ -1,25 +1,25 @@
 #!/bin/bash
 
-# Define output CSV
+# Define the output summary CSV file
 OUTPUT="wikimedia_data_summary.csv"
 
-# Write CSV header
+# Write the header row
 echo "filename,size,num_lines" > "$OUTPUT"
 
-# Loop through each .csv file in data/
+# Loop through each downloaded CSV file in the data/ directory
 for file in data/*.csv; do
-    # Check if files exist to handle empty directory edge cases
+    # Guard against no matching files
     [ -e "$file" ] || continue
 
-    # Extract filename without directory path
+    # 1. Extract just the filename (no directory path)
     fname=$(basename "$file")
 
-    # Get human-readable size
+    # 2. Get file size in human-readable format (e.g., 25M)
     fsize=$(ls -lh "$file" | awk '{print $5}')
 
-    # Get line count
+    # 3. Get total line count
     flines=$(wc -l < "$file")
 
-    # Append row to CSV
+    # Append row to output CSV
     echo "$fname,$fsize,$flines" >> "$OUTPUT"
 done
